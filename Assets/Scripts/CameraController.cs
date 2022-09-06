@@ -85,8 +85,6 @@ public class CameraController : MonoBehaviour
             adjustedSpeed *= 4;
         }
 
-       
-
         if (Input.mousePosition.x < 10)
         {
             transform.Translate(Vector3.left * adjustedSpeed * Time.deltaTime);
@@ -103,7 +101,6 @@ public class CameraController : MonoBehaviour
         {
             transform.position += ConstrainedLocalVector(Vector3.back) * adjustedSpeed * Time.deltaTime;
         }
-        
     }
     
     Vector3 ConstrainedLocalVector(Vector3 vector)
