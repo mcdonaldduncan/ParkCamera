@@ -24,20 +24,16 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         isRotating = false;
-        KeyboardLateralMovement();
+        //ConstrainY();
 
-        if (isContinuous)
-        {
-            ContinuousRotation();
-        }
-        else
-        {
-            MouseRotation();
-        }
-        
+        if (isContinuous) ContinuousRotation();
+        else MouseRotation();
+
+        MouseLateralMovement();
+        MouseWheelZoom();
         MouseOrbit();
         KeyboardVerticalMovement();
-        MouseLateralMovement();
+        KeyboardLateralMovement();
     }
 
     public void ChooseRotationStyle()
@@ -146,18 +142,15 @@ public class CameraController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit))
             {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 orbitPoint = hit.point;
-                Debug.Log(hit.point);
-                Debug.Log("Did Hit");
             }
             else
             {
                 orbitPoint = transform.position + transform.TransformDirection(Vector3.forward) * 50;
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 50, Color.red);
-                Debug.Log("Did Not Hit");
             }
         }
+
+        //orbitPoint = transform.position + transform.TransformDirection(Vector3.forward) * transform.position.y;
 
         Vector3 adjustedOrbit = new Vector3(orbitPoint.x, transform.position.y, orbitPoint.z);
         
@@ -202,6 +195,35 @@ public class CameraController : MonoBehaviour
         if (Input.GetKey(KeyCode.E) && transform.position.y < 100)
         {
             transform.Translate(Vector3.up * adjustedSpeed * Time.deltaTime);
+        }
+    }
+    
+    void MouseWheelZoom()
+    {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (transform.position.y <= 15 && scroll > 0 || transform.position.y >= 100 && scroll < 0)
+            return;
+
+        float adjustedSpeed = speed * 10;
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            adjustedSpeed *= 2;
+        }
+        
+        
+        transform.Translate(Vector3.forward * scroll * adjustedSpeed * 100 * Time.deltaTime);
+    }
+
+    void ConstrainY()
+    {
+        if (transform.position.y < 1)
+        {
+            transform.position = new Vector3(transform.position.x, 1, transform.position.z);
+        }
+        if (transform.position.y > 100)
+        {
+            transform.position = new Vector3(transform.position.x, 100, transform.position.z);
         }
     }
 }
