@@ -2,17 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Aegis : MonoBehaviour
+public class Aegis : Entity
 {
-    enum AgeState
-    {
-        Child,
-        Teen,
-        Adult,
-        Elderly,
-        Dead
-    }
-    
     void Start()
     {
         
@@ -22,4 +13,7 @@ public class Aegis : MonoBehaviour
     {
         
     }
+
 }
+
+
